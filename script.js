@@ -1,25 +1,19 @@
 // Theme Toggle Functionality
 const themeToggle = document.getElementById('themeToggle');
-const themeIcon = themeToggle.querySelector('.theme-icon');
 const html = document.documentElement;
 
 // Check for saved theme preference or default to dark mode
 const currentTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', currentTheme);
-updateThemeIcon(currentTheme);
+// Set checkbox state based on theme (checked = light/sun mode)
+themeToggle.checked = currentTheme === 'light';
 
 // Theme toggle event listener
-themeToggle.addEventListener('click', () => {
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+themeToggle.addEventListener('change', () => {
+    const newTheme = themeToggle.checked ? 'light' : 'dark';
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme);
 });
-
-function updateThemeIcon(theme) {
-    themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
-}
 
 // Mobile Menu Toggle
 const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -96,7 +90,14 @@ function typeText() {
 
 // Start typing animation when page loads
 window.addEventListener('load', () => {
+    // Ensure page starts at the very top
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     setTimeout(typeText, 1000);
+});
+
+// Also scroll to top before page unloads (for refresh)
+window.addEventListener('beforeunload', () => {
+    window.scrollTo(0, 0);
 });
 
 // Navbar scroll effect
